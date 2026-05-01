@@ -20,8 +20,6 @@ return new class extends Migration
             $table->foreignId('category_id')->nullable()->constrained()->nullOnDelete();
             $table->foreignId('color_id')->nullable()->constrained()->nullOnDelete();
 
-            $table->integer('stock')->default(0);
-
             $table->decimal('selling_price', 10, 2);
 
             $table->boolean('is_active')->default(true);

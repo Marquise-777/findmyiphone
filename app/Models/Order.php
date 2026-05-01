@@ -15,14 +15,20 @@ class Order extends Model
         'customer_contact',
         'customer_address',
         'subtotal',
-        'discount',
+        'discount_percent',
+        'discount_amount',
         'tax',
         'due',
         'paid',
         'total',
         'payment_method',
+        'customer_id',
     ];
 
+    public function customer()
+    {
+        return $this->belongsTo(Customer::class);
+    }
     public function items()
     {
         return $this->hasMany(OrderItem::class);

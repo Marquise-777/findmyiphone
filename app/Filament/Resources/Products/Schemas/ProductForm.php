@@ -105,10 +105,11 @@ class ProductForm
                     }),
 
 
-                TextInput::make('stock')
-                    ->numeric()
-                    ->default(0)
-                    ->required(),
+                TextInput::make('available_stock')
+                    ->label('Stock')
+                    ->disabled()
+                    ->dehydrated(false)
+                    ->visible(fn ($record) => $record !== null),
 
                 TextInput::make('selling_price')
                     ->numeric(),

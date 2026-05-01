@@ -43,4 +43,8 @@ class Product extends Model
             ->withPivot(['quantity', 'price', 'total'])
             ->withTimestamps();
     }
+    public function units()
+    {
+        return $this->hasMany(ProductUnit::class);
+    }
 }

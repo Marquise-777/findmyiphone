@@ -41,11 +41,12 @@ class ProductsTable
                     ->badge()
                     ->separator(',')
                     ->toggleable(),
-
-                TextColumn::make('stock')
-                    ->sortable()
-                    ->badge()
-                    ->color(fn(int $state) => $state <= 5 ? 'danger' : 'success'),
+                TextColumn::make('available_units')
+                    ->label('Stock')
+                    ->getStateUsing(
+                        fn($record) =>
+                        $record->units()->where('is_sold', false)->count()
+                    ),
 
                 TextColumn::make('purchase_price')
                     ->money('INR')

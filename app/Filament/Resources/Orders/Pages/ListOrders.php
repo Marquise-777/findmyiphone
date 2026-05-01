@@ -13,7 +13,12 @@ class ListOrders extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            CreateAction::make(),
+            // CreateAction::make(),
+            \Filament\Actions\Action::make('newSale')
+                ->label('New Order')
+                ->url('/admin/sales')
+                ->icon('heroicon-o-plus')
+                ->button(),
         ];
     }
 }

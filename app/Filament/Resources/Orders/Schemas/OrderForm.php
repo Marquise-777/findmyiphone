@@ -57,9 +57,17 @@ class OrderForm
                     ->dehydrated()
                     ->unique(ignoreRecord: true),
 
-                TextInput::make('customer_name'),
-                TextInput::make('customer_contact'),
-                Textarea::make('customer_address'),
+                Select::make('customer_id')
+                    ->relationship('customer', 'name')
+                    ->searchable()
+                    ->preload()
+                    ->createOptionForm([
+                        TextInput::make('name')
+                            ->required(),
+                        TextInput::make('phone'),
+                        TextInput::make('email'),
+                    ])
+                    ->required(),
 
                 Section::make('Order Items')
                     ->schema([
@@ -74,15 +82,15 @@ class OrderForm
                                     ->relationship(
                                         name: 'product',
                                         titleAttribute: 'name',
-                                        modifyQueryUsing: fn($query) => $query->where('stock', '>', 0)->with('colors')
+                                        modifyQueryUsing: fn($query) => $query->with('colors')
                                     )
                                     ->getOptionLabelFromRecordUsing(function (Product $record) {
 
                                         $colors = $record->colors->pluck('name')->join(', ');
-                                        $stock = $record->stock;
 
-                                        return "{$record->name} | Stock: {$stock}" .
-                                            ($colors ? " | Colors: {$colors}" : '');
+
+                                        return "{$record->name}" . ($colors ? " | Colors: {$colors}" : '');
+                                        ($colors ? " | Colors: {$colors}" : '');
                                     })
                                     ->searchable()
                                     ->preload()
@@ -101,26 +109,6 @@ class OrderForm
                                         self::calculate($get, $set);
                                     }),
 
-                                TextInput::make('quantity')
-                                    ->numeric()
-                                    ->default(1)
-                                    ->live()
-                                    ->afterStateUpdated(function ($state, Set $set, Get $get) {
-
-                                        $productId = $get('product_id');
-
-                                        if ($productId) {
-                                            $product = Product::find($productId);
-
-                                            if ($product && $state > $product->stock) {
-                                                $set('quantity', $product->stock);
-                                            }
-                                        }
-
-                                        $set('total', $state * ($get('price') ?? 0));
-
-                                        self::calculate($get, $set);
-                                    }),
 
                                 TextInput::make('price')
                                     ->numeric()
@@ -129,7 +117,13 @@ class OrderForm
                                         self::calculate($get, $set);
                                     }),
 
-                                TextInput::make('imeiorserial'),
+                                Select::make('product_unit_id')
+                                    ->label('IMEI / Serial')
+                                    ->relationship('unit', 'imei')
+                                    ->searchable()
+                                    ->preload()
+                                    ->getOptionLabelFromRecordUsing(fn($record) => "{$record->imei}")
+                                    ->required(),
 
                                 TextInput::make('total')
                                     ->readOnly()
@@ -142,7 +136,7 @@ class OrderForm
 
                 Section::make('Payment')
                     ->schema([
-                        TextInput::make('discount')
+                        TextInput::make('discount_percent')
                             ->numeric()
                             ->default(0)
                             ->live()

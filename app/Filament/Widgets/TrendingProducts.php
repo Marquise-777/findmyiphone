@@ -13,11 +13,9 @@ class TrendingProducts extends ChartWidget
 
     protected function getData(): array
     {
-        $data = OrderItem::query()
-            ->selectRaw('product_id, SUM(quantity) as total_quantity')
+        $data = OrderItem::selectRaw('product_id, COUNT(*) as total_quantity')
             ->groupBy('product_id')
             ->orderByDesc('total_quantity')
-            ->with('product')
             ->limit(5)
             ->get();
 

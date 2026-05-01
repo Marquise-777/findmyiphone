@@ -23,24 +23,15 @@ class OrderResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'Order';
 
-    public static function getNavigationItems(): array
-    {
-        return array_merge(
-            parent::getNavigationItems(),
-            [
-                NavigationItem::make('New Sales')
-                    ->icon('heroicon-o-plus-circle')
-                    ->url(static::getUrl('create'))
-                    ->group('Sales')
-                    ->sort(0),
-            ]
-        );
-    }
-
 
     public static function getNavigationGroup(): ?string
     {
         return 'Sales';
+    }
+
+    public static function getCreateUrl(): string
+    {
+        return '/admin/sales';  // or Sales::getUrl()
     }
 
     protected static ?int $navigationSort = 1;
@@ -66,7 +57,7 @@ class OrderResource extends Resource
     {
         return [
             'index' => ListOrders::route('/'),
-            'create' => CreateOrder::route('/create'),
+            // 'create' => CreateOrder::route('/create'),
             'edit' => EditOrder::route('/{record}/edit'),
         ];
     }

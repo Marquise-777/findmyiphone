@@ -18,7 +18,7 @@ class EditOrder extends EditRecord
             Action::make('print')
                 ->label('Print Invoice')
                 ->icon('heroicon-o-printer')
-                ->url(fn() => route('orders.print', $this->record))
+                ->url(fn() => '/admin/invoice/' . $this->record->id)
                 ->openUrlInNewTab(),
         ];
     }

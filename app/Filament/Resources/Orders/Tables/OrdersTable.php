@@ -21,10 +21,15 @@ class OrdersTable
                     ->searchable()
                     ->sortable()
                     ->date('d M y'), // 11 Feb 26 format
-                TextColumn::make('customer_name')
+                TextColumn::make('customer.name')
                     ->searchable()
                     ->sortable(),
-                TextColumn::make('discount')
+                TextColumn::make('discount_percent')
+                    ->label('Discount %')
+                    ->searchable()
+                    ->sortable(),
+                TextColumn::make('discount_amount')
+                    ->label('Discount Amount')
                     ->searchable()
                     ->sortable(),
                 TextColumn::make('due')

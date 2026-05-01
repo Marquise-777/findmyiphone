@@ -5,15 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 class OrderItem extends Model
-
 {
     protected $fillable = [
         'order_id',
         'product_id',
-        'quantity',
+        'product_unit_id',
         'price',
-        'imeiorserial',
-        'total',
     ];
 
     public function product()
@@ -24,5 +21,10 @@ class OrderItem extends Model
     public function order()
     {
         return $this->belongsTo(Order::class);
+    }
+
+    public function unit()
+    {
+        return $this->belongsTo(ProductUnit::class, 'product_unit_id');
     }
 }

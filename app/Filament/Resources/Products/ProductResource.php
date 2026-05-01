@@ -14,6 +14,7 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use App\Filament\Resources\ProductResource\RelationManagers\UnitsRelationManager;
 
 class ProductResource extends Resource
 {
@@ -62,7 +63,7 @@ class ProductResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            UnitsRelationManager::class,
         ];
     }
 
@@ -74,4 +75,5 @@ class ProductResource extends Resource
             'edit' => EditProduct::route('/{record}/edit'),
         ];
     }
+
 }
