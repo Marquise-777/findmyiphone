@@ -29,7 +29,7 @@ class ProductsTable
                     ->toggleable(),
 
                 TextColumn::make('categories.name')
-                    ->label('Categories')
+                    ->label('Supplier')
                     ->sortable()
                     ->badge()
                     ->separator(',')

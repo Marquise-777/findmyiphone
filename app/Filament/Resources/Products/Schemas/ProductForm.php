@@ -75,6 +75,7 @@ class ProductForm
 
 
                 Select::make('categories')
+                    ->label('Supplier')
                     ->relationship('categories', 'name')
                     ->multiple()
                     ->searchable()
@@ -109,7 +110,7 @@ class ProductForm
                     ->label('Stock')
                     ->disabled()
                     ->dehydrated(false)
-                    ->visible(fn ($record) => $record !== null),
+                    ->visible(fn($record) => $record !== null),
 
                 TextInput::make('selling_price')
                     ->numeric(),

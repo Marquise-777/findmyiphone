@@ -37,7 +37,7 @@
                                 <span style="font-size: 0.75rem; color: #6b7280; margin-left: 0.5rem;">IMEI</span>
                             </div>
                             <div>
-                                <span style="font-family: monospace;">₱{{ number_format($item['price'], 2) }}</span>
+                                <span style="font-family: monospace;">₹{{ number_format($item['price'], 2) }}</span>
                                 <button wire:click="removeFromCart({{ $index }})" wire:confirm="Remove item?" style="margin-left: 1rem; color: #ef4444; border: none; background: none; cursor: pointer;">✕</button>
                             </div>
                         </div>
@@ -65,7 +65,7 @@
                     <div style="margin-bottom: 1rem;">
                         <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
                             <span>Subtotal</span>
-                            <span style="font-family: monospace;">₱{{ number_format($subtotal, 2) }}</span>
+                            <span style="font-family: monospace;">₹{{ number_format($subtotal, 2) }}</span>
                         </div>
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
                             <div style="display: flex; align-items: center; gap: 0.5rem;">
@@ -78,11 +78,11 @@
                                     style="width: 65px; padding: 0.25rem; border: 1px solid #d1d5db; border-radius: 0.25rem; font-size: 0.875rem; text-align: center;">
                                 <span>%</span>
                             </div>
-                            <span style="font-family: monospace; color: #16a34a;">-₱{{ number_format($discountAmount, 2) }}</span>
+                            <span style="font-family: monospace; color: #16a34a;">-₹{{ number_format($discountAmount, 2) }}</span>
                         </div>
                         <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
                             <span>Tax</span>
-                            <span style="font-family: monospace;">₱{{ number_format($tax, 2) }}</span>
+                            <span style="font-family: monospace;">₹{{ number_format($tax, 2) }}</span>
                         </div>
 
                         {{-- Payment section --}}
@@ -104,14 +104,14 @@
                             </div>
                             <div style="display: flex; justify-content: space-between;">
                                 <span>Due</span>
-                                <span style="font-family: monospace; color: #dc2626;">₱{{ number_format($due, 2) }}</span>
+                                <span style="font-family: monospace; color: #dc2626;">₹{{ number_format($due, 2) }}</span>
                             </div>
                         </div>
                     </div>
 
                     <div style="border-top: 1px solid #d1d5db; padding-top: 0.5rem; display: flex; justify-content: space-between; font-weight: bold;">
                         <span>Total</span>
-                        <span style="font-family: monospace;">₱{{ number_format($total, 2) }}</span>
+                        <span style="font-family: monospace;">₹{{ number_format($total, 2) }}</span>
                     </div>
 
                     <button wire:click="checkout"
