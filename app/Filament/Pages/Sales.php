@@ -11,13 +11,19 @@ use App\Models\ProductUnit;
 use App\Models\Order;
 use App\Models\OrderItem;
 use BackedEnum;
+use UnitEnum;
 
 class Sales extends Page implements \Filament\Forms\Contracts\HasForms
 {
     use InteractsWithForms;
 
     protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-shopping-cart';
+    protected static string|UnitEnum|null $navigationGroup = 'Sales';
     protected string $view = 'filament.pages.sales';
+
+    // Add navigation group and sort
+    // protected static ?string $navigationGroup = 'Sales';
+    protected static ?int $navigationSort = 0;  // shows before Orders (which has sort = 1)
 
     public array $cart = [];
     public string $imei_input = '';

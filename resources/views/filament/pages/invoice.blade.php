@@ -32,6 +32,7 @@
     <div class="custom-invoice">
         <div class="invoice-header">
             <div class="center">
+                <img src="{{ asset('/logo.jpeg') }}" alt="Logo" style="max-width: 50px; border-radius: 50%;">
                 <h3>BILL / CASH MEMO</h3>
                 <h2>FIND MY iPHONE</h2>
                 <p>
@@ -60,7 +61,7 @@
                 <tr>
                     <td>{{ $item->unit->product->name }}</td>
                     <td>{{ $item->unit->imei }}</td>
-                    <td>₱{{ number_format($item->price, 2) }}</td>
+                    <td>₹{{ number_format($item->price, 2) }}</td>
                 </tr>
                 @endforeach
             </tbody>
@@ -70,20 +71,20 @@
         <div>
             <div class="summary-row">
                 <span>Subtotal</span>
-                <span>₱{{ number_format($this->order->subtotal, 2) }}</span>
+                <span>₹{{ number_format($this->order->subtotal, 2) }}</span>
             </div>
             @if(($this->order->discount_amount ?? 0) > 0)
             <div class="summary-row">
                 <span>Discount ({{ $this->order->discount_percent ?? 0 }}%)</span>
-                <span>- ₱{{ number_format($this->order->discount_amount, 2) }}</span>
+                <span>- ₹{{ number_format($this->order->discount_amount, 2) }}</span>
             </div>
             @endif
             <div class="total-row">
-                Total: ₱{{ number_format($this->order->total, 2) }}
+                Total: ₹{{ number_format($this->order->total, 2) }}
             </div>
         </div>
 
-        <p>
+        <p style="font-size: 10px;">
         • 1 month warranty<br>
         • LCD leh mahni tihchhiat a huam lo<br>
         • Memo tello in warranty a claim theihloh<br>
