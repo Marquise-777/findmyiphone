@@ -11,6 +11,8 @@ class ProductUnit extends Model
         'imei',
         'is_sold',
         'sold_at',
+        'supplier_id',   // new
+        'cost_price',
     ];
 
     protected static function booted()
@@ -39,5 +41,10 @@ class ProductUnit extends Model
     public function product()
     {
         return $this->belongsTo(Product::class);
+    }
+
+    public function supplier()
+    {
+        return $this->belongsTo(Supplier::class);
     }
 }

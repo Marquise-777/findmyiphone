@@ -75,7 +75,6 @@ class ProductForm
 
 
                 Select::make('categories')
-                    ->label('Supplier')
                     ->relationship('categories', 'name')
                     ->multiple()
                     ->searchable()

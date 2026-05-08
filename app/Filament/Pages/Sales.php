@@ -132,6 +132,7 @@ class Sales extends Page implements \Filament\Forms\Contracts\HasForms
                 'product_id' => $unit->product_id,
                 'product_unit_id' => $unit->id,
                 'price' => $unit->product->selling_price,
+                'cost_price' => $unit->cost_price ?? 0,
             ]);
             $unit->update(['is_sold' => true, 'sold_at' => now()]);
         }
