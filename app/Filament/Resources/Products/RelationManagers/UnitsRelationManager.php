@@ -90,7 +90,7 @@ class UnitsRelationManager extends RelationManager
 
                         Select::make('supplier_id')
                             ->label('Supplier')
-                            ->options(Supplier::pluck('name', 'id'))
+                            ->relationship('supplier', 'name')
                             ->searchable()
                             ->preload()
                             ->createOptionForm([
@@ -99,7 +99,7 @@ class UnitsRelationManager extends RelationManager
                                     ->maxLength(255),
                                 TextInput::make('phone')
                                     ->maxLength(255),
-                            ])
+                            ])    
                             ->nullable(),
 
                         TextInput::make('cost_price')

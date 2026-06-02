@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::table('product_units', function (Blueprint $table) {
             $table->foreignId('supplier_id')->nullable()->constrained('suppliers')->nullOnDelete();
-            $table->decimal('cost_price', 12, 2)->nullable(); // also keep cost_price if not already
+            // also keep cost_price if not already
         });
     }
 
