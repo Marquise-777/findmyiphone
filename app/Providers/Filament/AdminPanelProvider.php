@@ -4,6 +4,8 @@ namespace App\Providers\Filament;
 
 use App\Filament\Pages\CDashboard;
 use App\Filament\Pages\Sales;
+use App\Filament\Widgets\ProfitStats;
+use App\Filament\Widgets\ProfitTrend;
 use App\Filament\Widgets\SalesChart;
 use App\Filament\Widgets\StatsOverview;
 use App\Filament\Widgets\TrendingProducts;
@@ -50,6 +52,9 @@ class AdminPanelProvider extends PanelProvider
             ->widgets([
                 //AccountWidget::class,
                 //FilamentInfoWidget::class,
+
+                ProfitStats::class,
+                ProfitTrend::class,
                 StatsOverview::class,
                 SalesChart::class,
                 TrendingProducts::class,

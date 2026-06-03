@@ -26,15 +26,15 @@ class Sales extends Page implements \Filament\Forms\Contracts\HasForms
     // protected static ?string $navigationGroup = 'Sales';
     protected static ?int $navigationSort = 0;  // shows before Orders (which has sort = 1)
 
-    public static function shouldRegisterNavigation(): bool
-    {
-        return Auth::user()?->id !== 1;
-    }
+    // public static function shouldRegisterNavigation(): bool
+    // {
+    //     return Auth::user()?->id !== 1;
+    // }
 
-    public static function canAccess(): bool
-    {
-        return Auth::user()?->id !== 1;
-    }
+    // public static function canAccess(): bool
+    // {
+    //     return Auth::user()?->id !== 1;
+    // }
 
     public array $cart = [];
     public string $imei_input = '';

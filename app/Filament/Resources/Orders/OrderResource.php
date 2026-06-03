@@ -29,10 +29,10 @@ class OrderResource extends Resource
         return 'Sales';
     }
 
-    public static function getCreateUrl(): string
-    {
-        return '/admin/sales';  // or Sales::getUrl()
-    }
+    // public static function getCreateUrl(): string
+    // {
+    //     // return '/admin/sales';  // or Sales::getUrl()
+    // }
 
     protected static ?int $navigationSort = 1;
 
