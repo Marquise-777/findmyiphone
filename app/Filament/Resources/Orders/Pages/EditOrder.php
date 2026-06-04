@@ -25,24 +25,24 @@ class EditOrder extends EditRecord
     protected function beforeSave(): void
     {
         // Restore old stock first
-        foreach ($this->record->items as $item) {
-            $product = $item->product;
+        // foreach ($this->record->items as $item) {
+        //     $product = $item->product;
 
-            if ($product) {
-                $product->increment('stock', $item->quantity);
-            }
-        }
+        //     if ($product) {
+        //         $product->increment('stock', $item->quantity);
+        //     }
+        // }
     }
 
     protected function afterSave(): void
     {
         // Deduct new stock
-        foreach ($this->record->items as $item) {
-            $product = $item->product;
+        // foreach ($this->record->items as $item) {
+        //     $product = $item->product;
 
-            if ($product) {
-                $product->decrement('stock', $item->quantity);
-            }
-        }
+        //     if ($product) {
+        //         $product->decrement('stock', $item->quantity);
+        //     }
+        // }
     }
 }
