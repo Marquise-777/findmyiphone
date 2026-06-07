@@ -8,6 +8,8 @@ use Filament\Actions\EditAction;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Filament\Tables\Filters\SelectFilter;
+use App\Models\Supplier;
 
 class ProductsTable
 {
@@ -16,12 +18,31 @@ class ProductsTable
         return $table
             ->columns([
                 TextColumn::make('name')
-                    ->searchable()
+                    ->searchable(
+                        query: function ($query, string $search) {
+                            $query->where(function ($q) use ($search) {
+                                $q->where('name', 'like', "%{$search}%")
+                                    ->orWhere('sku', 'like', "%{$search}%")
+                                    ->orWhereHas('units', function ($unitQuery) use ($search) {
+                                        $unitQuery->where('imei', 'like', "%{$search}%");
+                                    });
+                            });
+                        }
+                    )
                     ->sortable(),
 
-                TextColumn::make('sku')
-                    ->searchable()
-                    ->sortable(),
+                TextColumn::make('supplier_names')
+                    ->label('Supplier')
+                    ->getStateUsing(function ($record) {
+                        return $record->units()
+                            ->with('supplier')
+                            ->get()
+                            ->pluck('supplier.name')
+                            ->filter()
+                            ->unique()
+                            ->join(', ');
+                    })
+                    ->wrap(),
 
                 TextColumn::make('brand.name')
                     ->label('Brand')
@@ -61,7 +82,22 @@ class ProductsTable
                     ->sortable(),
             ])
             ->filters([
-                //
+                SelectFilter::make('supplier')
+                    ->label('Supplier')
+                    ->options(
+                        Supplier::query()
+                            ->orderBy('name')
+                            ->pluck('name', 'id')
+                    )
+                    ->query(function ($query, array $data) {
+                        if (blank($data['value'])) {
+                            return $query;
+                        }
+
+                        return $query->whereHas('units', function ($q) use ($data) {
+                            $q->where('supplier_id', $data['value']);
+                        });
+                    }),
             ])
             ->recordActions([
                 EditAction::make(),

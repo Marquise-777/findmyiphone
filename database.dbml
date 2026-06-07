@@ -1,0 +1,272 @@
+Project FindMyiPhone {
+  database_type: 'MySQL'
+  Note: 'FindMyiPhone - Inventory Management System Database Schema'
+}
+
+// ============================================
+// AUTHENTICATION & SESSION TABLES
+// ============================================
+
+Table users {
+  id int [pk, increment]
+  name varchar
+  email varchar [unique, not null]
+  email_verified_at timestamp [null]
+  password varchar
+  remember_token varchar [null]
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table password_reset_tokens {
+  email varchar [pk]
+  token varchar
+  created_at timestamp [null]
+}
+
+Table sessions {
+  id varchar [pk]
+  user_id int [null, ref: > users.id]
+  ip_address varchar(45) [null]
+  user_agent text [null]
+  payload longtext
+  last_activity int
+  indexes {
+    (user_id)
+    (last_activity)
+  }
+}
+
+// ============================================
+// CACHE & JOB TABLES
+// ============================================
+
+Table cache {
+  key varchar [pk]
+  value mediumtext
+  expiration int
+  indexes {
+    (expiration)
+  }
+}
+
+Table cache_locks {
+  key varchar [pk]
+  owner varchar
+  expiration int
+  indexes {
+    (expiration)
+  }
+}
+
+Table jobs {
+  id int [pk, increment]
+  queue varchar
+  payload longtext
+  attempts unsigned_tinyint
+  reserved_at unsigned_int [null]
+  available_at unsigned_int
+  created_at unsigned_int
+  indexes {
+    (queue)
+  }
+}
+
+Table job_batches {
+  id varchar [pk]
+  name varchar
+  total_jobs int
+  pending_jobs int
+  failed_jobs int
+  failed_job_ids longtext
+  options mediumtext [null]
+  cancelled_at int [null]
+  created_at int
+  finished_at int [null]
+}
+
+Table failed_jobs {
+  id int [pk, increment]
+  uuid varchar [unique]
+  connection text
+  queue text
+  payload longtext
+  exception longtext
+  failed_at timestamp
+}
+
+// ============================================
+// CUSTOMER TABLES
+// ============================================
+
+Table customers {
+  id int [pk, increment]
+  name varchar
+  phone varchar [null]
+  email varchar [null]
+  created_at timestamp
+  updated_at timestamp
+}
+
+// ============================================
+// SUPPLIER TABLES
+// ============================================
+
+Table suppliers {
+  id int [pk, increment]
+  name varchar
+  contact_person varchar [null]
+  phone varchar [null]
+  email varchar [null]
+  address text [null]
+  created_at timestamp
+  updated_at timestamp
+}
+
+// ============================================
+// MASTER DATA TABLES (Lookup/Reference)
+// ============================================
+
+Table brands {
+  id int [pk, increment]
+  name varchar [unique]
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table categories {
+  id int [pk, increment]
+  name varchar [unique]
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table colors {
+  id int [pk, increment]
+  name varchar [unique]
+  created_at timestamp
+  updated_at timestamp
+}
+
+// ============================================
+// PRODUCT TABLES
+// ============================================
+
+Table products {
+  id int [pk, increment]
+  name varchar
+  sku varchar [unique]
+  brand_id int [null, ref: > brands.id]
+  selling_price decimal(10,2)
+  available_stock int [default: 0]
+  is_active boolean [default: true]
+  created_at timestamp
+  updated_at timestamp
+  
+  Note: 'Core product table. Category and Color now use junction tables (many-to-many) instead of direct foreign keys.'
+}
+
+Table product_units {
+  id int [pk, increment]
+  product_id int [ref: > products.id]
+  imei varchar [unique]
+  is_sold boolean [default: false]
+  sold_at timestamp [null]
+  supplier_id int [null, ref: > suppliers.id]
+  cost_price decimal(12,2) [null]
+  created_at timestamp
+  updated_at timestamp
+  
+  Note: 'Individual product units identified by IMEI/serial number'
+}
+
+// ============================================
+// PRODUCT JUNCTION TABLES (Many-to-Many)
+// ============================================
+
+Table category_product {
+  id int [pk, increment]
+  product_id int [ref: > products.id]
+  category_id int [ref: > categories.id]
+  
+  Indexes {
+    (product_id, category_id) [unique]
+  }
+  
+  Note: 'Junction table for product-category many-to-many relationship'
+}
+
+Table color_product {
+  id int [pk, increment]
+  product_id int [ref: > products.id]
+  color_id int [ref: > colors.id]
+  
+  Indexes {
+    (product_id, color_id) [unique]
+  }
+  
+  Note: 'Junction table for product-color many-to-many relationship'
+}
+
+// ============================================
+// ORDER TABLES
+// ============================================
+
+Table orders {
+  id int [pk, increment]
+  invoice_number varchar [unique]
+  customer_id int [null, ref: > customers.id]
+  
+  // Old customer fields (deprecated, use customer_id instead)
+  customer_name varchar [null]
+  customer_contact varchar [null]
+  customer_address varchar [null]
+  
+  // Pricing fields
+  subtotal decimal(10,2)
+  discount_percent decimal(5,2) [default: 0]
+  discount_amount decimal(12,2) [default: 0]
+  discount decimal(10,2) [default: 0]
+  tax decimal(10,2) [default: 0]
+  due decimal(10,2) [default: 0]
+  paid decimal(10,2) [default: 0]
+  total decimal(10,2)
+  
+  // Status fields
+  payment_method varchar [null]
+  created_at timestamp
+  updated_at timestamp
+  
+  Note: 'Customer details in orders table are deprecated. Use customer_id reference to customers table instead.'
+}
+
+Table order_items {
+  id int [pk, increment]
+  order_id int [ref: > orders.id]
+  product_id int [ref: > products.id]
+  product_unit_id int [ref: > product_units.id]
+  price decimal(10,2)
+  cost_price decimal(12,2) [default: 0]
+  created_at timestamp
+  updated_at timestamp
+  
+  Note: 'Individual line items in an order'
+}
+
+// ============================================
+// RELATIONSHIP DIAGRAM
+// ============================================
+
+// Relationships are implicitly defined above via foreign key references
+// Summary of key relationships:
+
+// users (1) ──> (many) sessions
+// customers (1) ──> (many) orders
+// orders (1) ──> (many) order_items
+// products (1) ──> (many) product_units
+// products (1) ──> (many) order_items
+// product_units (1) ──> (many) order_items
+// suppliers (1) ──> (many) product_units
+// brands (1) ──> (many) products
+// categories (many) ──> (many) products [via category_product]
+// colors (many) ──> (many) products [via color_product]
